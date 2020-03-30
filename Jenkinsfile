@@ -4,11 +4,6 @@ node(){
 try{
 // try-catch block is used to test email notifications
 
-    // Default values
-    def subject = "JENKINS-NOTIFICATION:" + currentBuild.result + " : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-    def details = """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
-
 stage('scm checkout'){
   // this stage checkout the code from the Git repo
   
@@ -38,8 +33,8 @@ stage('archeive artifacts'){
 
     // sends the mail to the developers if the build is successful.
     emailext(
-        subject: subject,
-        body: details,
+        subject: ${DEFAULT_SUBJECT},
+        body: ${DEFAULT_CONTENT},
         attachLog: true,
         compressLog: true,
         recipientProviders: [developers()]
@@ -53,8 +48,8 @@ catch (err){
 
     // Send email to users who has started the build
     emailext(
-        subject: subject,
-        body: details,
+        subject: ${DEFAULT_SUBJECT},
+        body: ${DEFAULT_CONTENT},
         attachLog: true,
         compressLog: true,
         recipientProviders: [culprits(), developers()]
