@@ -7,7 +7,11 @@ stage('scm checkout'){
 }
 
 stage('build SupplyChainTools package'){
-  sh 'mvn clean package'
+  sh '''
+  export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+  export PATH=$JAVA_HOME/bin:$PATH
+  mvn clean package  
+  '''
 }
 
 stage('archeive artifacts'){
