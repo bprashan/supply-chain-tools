@@ -32,7 +32,7 @@ stage('archeive artifacts'){
 }
 catch (err){
     currentBuild.result = "FAILURE"
-    emailext body: '', recipientProviders: [culprits()], subject: ''
+    emailext body: '', recipientProviders: [developers(), culprits()], subject: ''
     throw err
     
 }
