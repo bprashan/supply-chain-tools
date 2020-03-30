@@ -33,8 +33,8 @@ stage('archeive artifacts'){
 
     // sends the mail to the developers if the build is successful.
     emailext(
-        subject: ${DEFAULT_SUBJECT},
-        body: ${DEFAULT_CONTENT},
+        subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' : SUCCESS!",
+        body: '${DEFAULT_CONTENT}',
         attachLog: true,
         compressLog: true,
         recipientProviders: [developers()]
@@ -48,8 +48,8 @@ catch (err){
 
     // Send email to users who has started the build
     emailext(
-        subject: ${DEFAULT_SUBJECT},
-        body: ${DEFAULT_CONTENT},
+        subject: '${DEFAULT_SUBJECT}',
+        body: '${DEFAULT_CONTENT}',
         attachLog: true,
         compressLog: true,
         recipientProviders: [culprits(), developers()]
