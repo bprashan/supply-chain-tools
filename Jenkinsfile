@@ -5,8 +5,8 @@ try{
 // try-catch block is used to test email notifications
 
     // Default values
-    def subject = "JENKINS-NOTIFICATION: ${env.BUILD_STATUS}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-    def details = """<p>${env.BUILD_STATUS}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    def subject = "JENKINS-NOTIFICATION:" + currentBuild.result + " : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    def details = """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
 
 stage('scm checkout'){
