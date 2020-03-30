@@ -1,5 +1,8 @@
 node(){
 
+try{    
+    
+
 stage('scm checkout'){
   cleanWs()
   
@@ -23,6 +26,15 @@ stage('archeive artifacts'){
 
     zip zipFile: 'SupplyChainTools.zip', archive: false, dir: 'SupplyChainTools'
     archiveArtifacts artifacts: 'SupplyChainTools.zip', fingerprint: true, allowEmptyArchive: false
+    emailext body: '', recipientProviders: [developers()], subject: ''
+}
+
+}
+catch (err){
+    currentBuild.result = "FAILURE"
+    emailext body: '', recipientProviders: [culprits()], subject: ''
+    throw err
+    
 }
 
 }
