@@ -4,6 +4,11 @@ node(){
 try{
 // try-catch block is used to test email notifications
 
+    // Default values
+    def subject = "JENKINS-NOTIFICATION: ${env.BUILD_STATUS}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    def details = """<p>${env.BUILD_STATUS}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+    <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
+
 stage('scm checkout'){
   // this stage checkout the code from the Git repo
   
@@ -30,15 +35,30 @@ stage('archeive artifacts'){
 
     zip zipFile: 'SupplyChainTools.zip', archive: false, dir: 'SupplyChainTools'
     archiveArtifacts artifacts: 'SupplyChainTools.zip', fingerprint: true, allowEmptyArchive: false
+
     // sends the mail to the developers if the build is successful.
-    emailext body: '', recipientProviders: [developers()], subject: ''
+    emailext(
+        subject: subject,
+        body: details,
+        attachLog: true,
+        compressLog: true,
+        recipientProviders: [developers()]
+    )
 }
 
 }
 catch (err){
 // sends the mail to the culprits and developers if build failure
     currentBuild.result = "FAILURE"
-    emailext body: '', recipientProviders: [developers(), culprits()], subject: ''
+
+    // Send email to users who has started the build
+    emailext(
+        subject: subject,
+        body: details,
+        attachLog: true,
+        compressLog: true,
+        recipientProviders: [culprits(), developers()]
+    )
     throw err
 }
 
